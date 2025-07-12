@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
@@ -19,7 +20,7 @@ class PostController extends Controller
             $posts->where('title', 'like', '%' . request('search') . '%');
         }
 
-        return view('dashboard', ['posts' => $posts->paginate(1)->withQueryString()]);
+        return view('dashboard', ['posts' => $posts->paginate(5)->withQueryString()]);
     }
 
     /**
@@ -41,9 +42,9 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Post $post)
     {
-        //
+        dd($post);
     }
 
     /**

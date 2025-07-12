@@ -20,7 +20,7 @@ Route::get('/posts', function () {
     ]);
 });
 
-Route::get('/posts/{post:slug}', function (Post $post) {
+Route::get('/posts/{post}', function (Post $post) {
     return view('post', [
         'title' => 'Single Post',
         'post' => $post

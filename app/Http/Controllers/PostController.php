@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -12,7 +13,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('dashboard', ['posts' => Post::latest()->paginate(5)]);
+        $posts = Post::latest()->where('author_id', Auth::user()->id);
+
+        if (request('search')) {
+            $posts->where('title', 'like', '%' . request('search') . '%');
+        }
+
+        return view('dashboard', ['posts' => $posts->paginate(1)->withQueryString()]);
     }
 
     /**

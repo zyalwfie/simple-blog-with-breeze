@@ -9,10 +9,10 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <x-nav-link href="/" :current="request()->is('/')">Home</x-nav-link>
-                        <x-nav-link href="/posts" :current="request()->is('posts*') || request()->is('authors*') || request()->is('categories*')">Blog</x-nav-link>
-                        <x-nav-link href="/about" :current="request()->is('about')">About</x-nav-link>
-                        <x-nav-link href="/contact" :current="request()->is('contact')">Contact</x-nav-link>
+                        <x-my-nav-link href="/" :current="request()->is('/')">Home</x-my-nav-link>
+                        <x-my-nav-link href="/posts" :current="request()->is('posts*') || request()->is('authors*') || request()->is('categories*')">Blog</x-my-nav-link>
+                        <x-my-nav-link href="/about" :current="request()->is('about')">About</x-my-nav-link>
+                        <x-my-nav-link href="/contact" :current="request()->is('contact')">Contact</x-my-nav-link>
                     </div>
                 </div>
             </div>
@@ -22,27 +22,39 @@
                     <!-- Profile dropdown -->
                     <div class="relative ml-3">
                         <div>
-                            <button @click="isOpen = !isOpen" type="button"
-                                class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800"
-                                id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                                <span class="absolute -inset-1.5"></span>
-                                <span class="sr-only">Open user menu</span>
-                                <img class="size-8 rounded-full"
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                    alt="" />
-                            </button>
+                            @if (Auth::check())
+                                <button @click="isOpen = !isOpen" type="button"
+                                    class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-gray-800 cursor-pointer"
+                                    id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                    <span class="absolute -inset-1.5"></span>
+                                    <span class="sr-only">Open user menu</span>
+                                    <img class="size-8 rounded-full"
+                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                        alt="" />
+                                    <div class="ml-2 text-gray-300 text-sm font-medium">
+                                        {{ Auth::user()->name }}
+                                    </div>
+                                    <div class="ms-1 text-gray-300">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            @else
+                                <div class="flex gap-4 items-center">
+                                    <a href="/login"
+                                        class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Login</a>
+                                    <span class="text-gray-300">|</span>
+                                    <a href="/register"
+                                        class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Register</a>
+                                </div>
+                            @endif
+
                         </div>
 
-                        <!--
-                Dropdown menu, show/hide based on menu state.
-
-                Entering: "transition ease-out duration-100"
-                  From: "transform opacity-0 scale-95"
-                  To: "transform opacity-100 scale-100"
-                Leaving: "transition ease-in duration-75"
-                  From: "transform opacity-100 scale-100"
-                  To: "transform opacity-0 scale-95"
-              -->
                         <div x-show="isOpen" x-transition:enter="transition ease-out duration-100"
                             x-transition:enter-start="transform opacity-0 scale-95"
                             x-transition:enter-end="transform opacity-100 scale-100"
@@ -53,14 +65,18 @@
                             role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
                             tabindex="-1">
                             <!-- Active: "bg-gray-100 outline-hidden", Not Active: "" -->
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
                                 tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
+                            <a href="/dashboard" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
                                 tabindex="-1" id="user-menu-item-1">Settings</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem"
-                                tabindex="-1" id="user-menu-item-2">Sign out</a>
+                            <form method="post" action="/logout">
+                                @csrf
+                                <button type="submit" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                                    role="menuitem" tabindex="-1" id="user-menu-item-2">Log out</button>
+                            </form>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="-mr-2 flex md:hidden">
@@ -91,33 +107,44 @@
     <!-- Mobile menu, show/hide based on menu state. -->
     <div x-show="isOpen" class="md:hidden" id="mobile-menu">
         <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-            <x-nav-link class="block" href="/" :current="request()->is('/')">Home</x-nav-link>
-            <x-nav-link class="block" href="/posts" :current="request()->is('posts*') || request()->is('authors*') || request()->is('categories*')">Blog</x-nav-link>
-            <x-nav-link class="block" href="/about" :current="request()->is('about')">About</x-nav-link>
-            <x-nav-link class="block roundedmx" href="/contact" :current="request()->is('contact')">Contact</x-nav-link>
+            <x-my-nav-link class="block" href="/" :current="request()->is('/')">Home</x-my-nav-link>
+            <x-my-nav-link class="block" href="/posts" :current="request()->is('posts*') || request()->is('authors*') || request()->is('categories*')">Blog</x-my-nav-link>
+            <x-my-nav-link class="block" href="/about" :current="request()->is('about')">About</x-my-nav-link>
+            <x-my-nav-link class="block roundedmx" href="/contact" :current="request()->is('contact')">Contact</x-my-nav-link>
         </div>
         <div class="border-t border-gray-700 pt-4 pb-3">
-            <div class="flex items-center px-5">
-                <div class="shrink-0">
-                    <img class="size-10 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt="" />
+            @if (Auth::check())
+                <div class="flex items-center px-5">
+                    <div class="shrink-0">
+                        <img class="size-10 rounded-full"
+                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                            alt="{{ Auth::user()->name }}" />
+                    </div>
+                    <div class="ml-3">
+                        <div class="text-base/5 font-medium text-white">{{ Auth::user()->name }}</div>
+                    </div>
                 </div>
-                <div class="ml-3">
-                    <div class="text-base/5 font-medium text-white">Tom Cook</div>
-                    <div class="text-sm font-medium text-gray-400">tom@example.com</div>
+                <div class="mt-3 space-y-1 px-2">
+                    <a href="/profile"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your
+                        Profile</a>
+                    <a href="/dashboard"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Settings</a>
+                    <form method="post" action="/logout">
+                        @csrf
+                        <button type="submit" class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white cursor-pointer w-full text-start"
+                            role="menuitem" tabindex="-1" id="user-menu-item-2">Log out</button>
+                    </form>
                 </div>
-            </div>
-            <div class="mt-3 space-y-1 px-2">
-                <a href="#"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Your
-                    Profile</a>
-                <a href="#"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Settings</a>
-                <a href="#"
-                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Sign
-                    out</a>
-            </div>
+            @else
+                <div class="mt3 space-y-1 px-2">
+                    <a href="/login"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Login</a>
+                    <a href="/register"
+                        class="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white">Register</a>
+
+                </div>
+            @endif
         </div>
     </div>
 </nav>

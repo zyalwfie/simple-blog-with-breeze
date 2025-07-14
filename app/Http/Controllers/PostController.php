@@ -75,17 +75,35 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Post $post)
     {
-        //
+        return view('dashboard.edit', ['post' => $post]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        Validator::make($request->all(), [
+            'title' => 'required|min:4|max:255|unique:posts,title,' . $post->id,
+            'category_id' => 'required',
+            'body' => 'required',
+        ], [], [
+            'title' => 'Post Title',
+            'category_id' => 'Post Category',
+            'body' => 'Post Body',
+        ])->validate();
+
+        $post->update([
+            'title' => $request->title,
+            'slug' => str($request->title)->slug(),
+            'category_id' => $request->category_id,
+            'author_id' => Auth::user()->id,
+            'body' => $request->body,
+        ]);
+
+        return redirect('/dashboard')->with('success', 'Your post has been updated!');
     }
 
     /**
@@ -94,6 +112,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect('/dashboard')->with('success', 'Post has been deleted!');
+        return redirect('/dashboard')->with('success', 'Your post has been deleted!');
     }
 }

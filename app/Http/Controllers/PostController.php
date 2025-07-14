@@ -43,7 +43,7 @@ class PostController extends Controller
         //     'body' => 'required',
         // ]);
 
-    Validator::make($request->all(), [
+        Validator::make($request->all(), [
             'title' => 'required|unique:posts|min:4|max:255',
             'category_id' => 'required',
             'body' => 'required',
@@ -91,8 +91,9 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect('/dashboard')->with('success', 'Post has been deleted!');
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -36,6 +37,22 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // $request->validate([
+        //     'title' => 'required|unique:posts',
+        //     'category_id' => 'required',
+        //     'body' => 'required',
+        // ]);
+
+    Validator::make($request->all(), [
+            'title' => 'required|unique:posts|min:4|max:255',
+            'category_id' => 'required',
+            'body' => 'required',
+        ], [], [
+            'title' => 'Post Title',
+            'category_id' => 'Post Category',
+            'body' => 'Post Body',
+        ])->validate();
+
         Post::create([
             'title' => $request->title,
             'slug' => str($request->title)->slug(),
@@ -44,7 +61,7 @@ class PostController extends Controller
             'body' => $request->body,
         ]);
 
-        return redirect('/dashboard');
+        return redirect('/dashboard')->with('success', 'New post has been added!');
     }
 
     /**

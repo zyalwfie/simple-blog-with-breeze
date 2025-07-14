@@ -28,7 +28,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.create');
     }
 
     /**
@@ -36,7 +36,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Post::create([
+            'title' => $request->title,
+            'slug' => str($request->title)->slug(),
+            'category_id' => $request->category_id,
+            'author_id' => Auth::user()->id,
+            'body' => $request->body,
+        ]);
+
+        return redirect('/dashboard');
     }
 
     /**

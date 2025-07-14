@@ -39,7 +39,9 @@ Route::get('/contact', function () {
     ]);
 });
 
-Route::resource('/dashboard', PostController::class)->middleware(['auth', 'verified']);
+Route::resource('/dashboard', PostController::class)->middleware(['auth', 'verified'])->parameters([
+    'dashboard' => 'post'
+]);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

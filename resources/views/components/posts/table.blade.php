@@ -1,6 +1,6 @@
 @if (Session::has('success'))
-    <div class="flex justify-center">
-        <div id="toast-success"
+    <div class="flex justify-center" x-data="{ show: true }">
+        <div id="toast-success" x-show="show" x-transition x-init="setTimeout(() => show = false, 2000)"
             class="absolute top-38 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow-sm dark:text-gray-400 dark:bg-gray-800"
             role="alert">
             <div

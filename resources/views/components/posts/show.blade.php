@@ -15,8 +15,11 @@
                             <a href="#" rel="author"
                                 class="text-xl font-bold text-gray-900 dark:text-white">{{ $post->author->name }}</a>
                             <p class="text-base text-gray-500 dark:text-gray-400">{{ $post->category->name }}</p>
-                            <p class="text-base text-gray-500 dark:text-gray-400"><time pubdate datetime="2022-02-08"
-                                    title="February 8th, 2022">{{ $post->created_at->diffForHumans() }}</time></p>
+                            <p class="text-base text-gray-500 dark:text-gray-400">
+                                <time pubdate datetime="2022-02-08" title="February 8th, 2022">
+                                    {{ $post->created_at->diffForHumans() }}
+                                </time>
+                            </p>
                         </div>
                     </div>
                 </address>

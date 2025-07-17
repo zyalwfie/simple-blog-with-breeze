@@ -17,6 +17,8 @@
 
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    @stack('style')
 </head>
 
 <body class="font-sans antialiased">
@@ -39,6 +41,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+    @stack('script')
 </body>
 
 </html>

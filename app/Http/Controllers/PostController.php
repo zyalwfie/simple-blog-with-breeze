@@ -46,7 +46,7 @@ class PostController extends Controller
         Validator::make($request->all(), [
             'title' => 'required|unique:posts|min:4|max:255',
             'category_id' => 'required',
-            'body' => 'required',
+            'body' => 'required|min:100',
         ], [], [
             'title' => 'Post Title',
             'category_id' => 'Post Category',

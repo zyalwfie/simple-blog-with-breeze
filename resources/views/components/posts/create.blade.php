@@ -1,3 +1,42 @@
+@push('style')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <style>
+        .ql-toolbar {
+            border: 1px solid rgb(209 213 219);
+            border-radius: 6px;
+            background-color: #f9fafb;
+        }
+
+        .ql-toolbar.ql-snow+.ql-container.ql-snow {
+            border-color: rgb(209 213 219);
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            background-color: #f9fafb;
+        }
+    </style>
+@endpush
+
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <script>
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Write post body here'
+        });
+
+        const postForm = document.getElementById('postForm');
+        const postBody = document.getElementById('body');
+        const quillEditor = document.getElementById('editor');
+
+        postForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const content = quillEditor.children[0].innerHTML;
+            postBody.value = content;
+            this.submit();
+        })
+    </script>
+@endpush
+
 <div class="relative max-w-4xl p-4 bg-white rounded-lg border dark:bg-gray-800 sm:p-5">
     <!-- Modal header -->
     <div class="mb-4 border-b pb-4">
@@ -26,16 +65,17 @@
         </div>
     @endif --}}
 
-    <form action="/dashboard" method="POST">
+    <form action="/dashboard" method="POST" id="postForm">
         @csrf
         <div class="mb-4">
             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
             <input type="text" name="title" id="title"
                 class="@error('title') bg-red-50 border-e-red-500 text-red-500 placeholder-red-700 focus:ring-red-500 focus:border-red-500 @enderror bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 value="{{ old('title') }}" placeholder="Type post title">
-                @error('title')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span> {{ $message }}</p>
-                @enderror
+            @error('title')
+                <p class="mt-2 text-xs text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span>
+                    {{ $message }}</p>
+            @enderror
         </div>
         <div class="mb-4">
             <label for="category" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Category</label>
@@ -47,17 +87,20 @@
                 @endforeach
             </select>
             @error('category_id')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span> {{ $message }}</p>
-                @enderror
+                <p class="mt-2 text-xs text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span>
+                    {{ $message }}</p>
+            @enderror
         </div>
         <div class="mb-4">
             <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Body</label>
             <textarea id="body" rows="4" name="body"
-                class="@error('body') bg-red-50 border-e-red-500 text-red-500 placeholder-red-700 focus:ring-red-500 focus:border-red-500 @enderror block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                class="hidden @error('body') bg-red-50 border-e-red-500 text-red-500 placeholder-red-700 focus:ring-red-500 focus:border-red-500 @enderror block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="Write post body here">{{ old('body') }}</textarea>
-                @error('body')
-                    <p class="mt-2 text-xs text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span> {{ $message }}</p>
-                @enderror
+            <div id="editor"></div>
+            @error('body')
+                <p class="mt-2 text-xs text-red-600 dark:text-red-500"><span class="font-medium">Oops!</span>
+                    {{ $message }}</p>
+            @enderror
         </div>
         <div class="flex gap-2">
             <button type="submit"

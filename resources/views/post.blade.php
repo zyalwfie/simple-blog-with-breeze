@@ -11,7 +11,7 @@
                         <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                             <img class="mr-4 w-16 h-16 rounded-full"
                                 src="{{ $post->author->avatar ? asset('storage/' . $post->author->avatar) : asset('img/default-avatar.png') }}"
-                                        alt="{{ $post->author->name }}">
+                                alt="{{ $post->author->name }}">
                             <div>
                                 <a href="#" rel="author"
                                     class="text-xl font-bold text-gray-900 dark:text-white">{{ $post->author->name }}</a>
@@ -26,7 +26,9 @@
                         class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
                         {{ $post->title }}</h1>
                 </header>
-                <p>{{ $post->body }}</p>
+                <div class="flex flex-col">
+                    {!! $post->body !!}
+                </div>
             </article>
         </div>
     </main>

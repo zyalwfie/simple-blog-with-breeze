@@ -41,7 +41,7 @@ Route::get('/contact', function () {
 
 Route::resource('/dashboard', PostController::class)->middleware(['auth', 'verified'])->parameters([
     'dashboard' => 'post'
-]);
+])->name('index', 'dashboard.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

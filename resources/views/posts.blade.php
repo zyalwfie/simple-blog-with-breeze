@@ -25,6 +25,10 @@
             </div>
         </form>
 
+        <div class="mb-8">
+            {{ $posts->links() }}
+        </div>
+
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             @forelse ($posts as $post)
                 <article
@@ -41,7 +45,7 @@
                         </span>
                     </div>
                     <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><a
-                            href="#">{{ $post->title }}</a></h2>
+                            href="/posts/{{ $post->slug }}">{{ $post->title }}</a></h2>
                     <div class="mb-5 font-light text-gray-500 dark:text-gray-400">
                         {!! Str::limit($post->body, 100) !!}
                     </div>

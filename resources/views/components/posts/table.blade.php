@@ -189,7 +189,7 @@
                             </tr>
                         @empty
                             <tr class="border-b dark:border-gray-700">
-                                <td colspan="5" class="px-4 py-3 text-center text-lg font-bold">No posts found!. <a
+                                <td colspan="5" class="px-4 py-3 text-center text-lg font-medium">No posts found!. <a
                                         href="{{ route('dashboard.index') }}" class="text-sm font-light">Back to all
                                         posts</a>
                                 </td>

@@ -26,12 +26,13 @@
 
         const postForm = document.getElementById('postForm');
         const postBody = document.getElementById('body');
-        const quillEditor = document.getElementById('editor');
+
+        quill.clipboard.dangerouslyPasteHTML(postBody.value);
 
         postForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const content = quillEditor.children[0].innerHTML;
-            postBody.value = content;
+            postBody.value = quill.root.innerHTML;
+
             this.submit();
         })
     </script>
